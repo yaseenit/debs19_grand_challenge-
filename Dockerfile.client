@@ -1,0 +1,35 @@
+FROM ubuntu:16.04
+
+# install basic dependencies
+RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update && apt-get install -y libtbb-dev
+
+RUN apt-get update 
+#&& apt-get install -y python-pip 
+
+RUN apt-get install libpcl-dev -y
+
+RUN apt-get install -y python3.5
+RUN apt-get install -y python3-pip 
+
+
+RUN python3 -V
+# add your dependencies to the list below, separated via whitespace
+RUN pip3 install --no-cache-dir requests numpy pandas sklearn cython==0.25.2
+
+
+RUN python3 -c "import numpy; print(numpy.__version__)"
+
+COPY client_app/ /app
+COPY python_pcl-0.3-py3.5-linux-x86_64.egg/ /usr/local/lib/python3.5/dist-packages/
+WORKDIR /app
+
+
+#RUN cd python-pcl-0.3.0rc1 && python3 setup.py build_ext -i && python3 setup.py install 
+
+
+
+
+WORKDIR /app
+
+CMD ["python3", "client_app.py"]
